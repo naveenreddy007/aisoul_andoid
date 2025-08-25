@@ -1,5 +1,0 @@
-08-25 07:29:24.287  7309  7336 I TestRunner: started: testAppLaunchAndNavigation(com.aisoul.privateassistant.DatabaseVerificationTest)
-08-25 07:29:24.288  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e99f8) locale list changing from [] to [en-US]
-08-25 07:29:24.305  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1d80b8) locale list changing from [] to [en-US]
-08-25 07:29:24.312  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1ee818) locale list changing from [] to [en-US]
-08-25 07:29:24.320  7309  7336 I TestRunner: finished: testAppLaunchAndNavigation(com.aisoul.privateassistant.DatabaseVerificationTest)
