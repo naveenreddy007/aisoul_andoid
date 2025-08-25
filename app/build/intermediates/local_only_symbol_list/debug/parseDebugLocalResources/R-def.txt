@@ -1,0 +1,34 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color purple_200
+color purple_500
+color purple_700
+color teal_200
+color teal_700
+color white
+drawable ic_dashboard
+drawable ic_home
+drawable ic_launcher
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+drawable ic_notifications
+id navigation_chat
+id navigation_devpanel
+id navigation_models
+id navigation_privacy
+menu bottom_nav_menu
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+string chat_placeholder
+string demo_mode
+string local_processing
+string title_chat
+string title_dev_panel
+string title_models
+string title_privacy
+string welcome_message
+style Theme.HelloWorldApp
+xml backup_rules
+xml data_extraction_rules

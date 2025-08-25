@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AI Soul</string>
+    <string name="title_chat">Chat</string>
+    <string name="title_models">Models</string>
+    <string name="title_privacy">Privacy</string>
+    <string name="title_dev_panel">Dev Panel</string>
+    <string name="welcome_message">Your private AI assistant</string>
+    <string name="chat_placeholder">Chat with your AI Soul...</string>
+    <string name="demo_mode">Demo Mode</string>
+    <string name="local_processing">All processing happens on your device</string>
+</resources>
