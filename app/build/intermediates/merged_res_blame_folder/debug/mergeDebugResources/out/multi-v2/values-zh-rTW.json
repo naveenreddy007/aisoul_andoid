@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.aisoul.privateassistant.app-mergeDebugResources-56:/values-zh-rTW/values-zh-rTW.xml",
+            "outputFile": "com.aisoul.privateassistant.app-mergeDebugResources-63:/values-zh-rTW/values-zh-rTW.xml",
             "map": [
                 {
                     "source": "C:\\Users\\bilva_labs\\.gradle\\caches\\8.13\\transforms\\7cf20b0e29db088a798d997cad43beba\\transformed\\jetified-foundation-release\\res\\values-zh-rTW\\values-zh-rTW.xml",

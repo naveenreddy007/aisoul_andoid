@@ -10,29 +10,36 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import com.aisoul.privateassistant.R
 import com.aisoul.privateassistant.ui.theme.AISoulTheme
+import com.aisoul.privateassistant.core.demo.DemoModeManager
 
 data class ChatMessage(
     val id: String,
     val content: String,
     val isFromUser: Boolean,
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = System.currentTimeMillis(),
+    val isLoading: Boolean = false
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen() {
+    val coroutineScope = rememberCoroutineScope()
+    
     var messageText by remember { mutableStateOf("") }
     var messages by remember { mutableStateOf(
         listOf(
             ChatMessage("1", "Hello! I'm your AI Soul assistant. All processing happens locally on your device for complete privacy.", false),
-            ChatMessage("2", "You're currently in Demo Mode. Install an AI model from the Models tab to get started.", false)
+            ChatMessage("2", "Demo Mode Active - Install an AI model from the Models tab to get started!", false)
         )
     ) }
+    var isGeneratingResponse by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -52,14 +59,21 @@ fun ChatScreen() {
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "AI Soul",
+                    text = "AI Soul - Demo Mode",
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Text(
                     text = stringResource(R.string.local_processing),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+                Text(
+                    text = "Install a real AI model from the Models tab for intelligent responses!",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.padding(top = 4.dp)
                 )
             }
         }
@@ -94,31 +108,70 @@ fun ChatScreen() {
                     modifier = Modifier.weight(1f),
                     placeholder = { Text(stringResource(R.string.chat_placeholder)) },
                     singleLine = false,
-                    maxLines = 3
+                    maxLines = 3,
+                    enabled = !isGeneratingResponse
                 )
                 
                 Spacer(modifier = Modifier.width(8.dp))
                 
                 IconButton(
                     onClick = {
-                        if (messageText.isNotBlank()) {
-                            messages = messages + ChatMessage(
+                        if (messageText.isNotBlank() && !isGeneratingResponse) {
+                            val userMessage = ChatMessage(
                                 id = System.currentTimeMillis().toString(),
                                 content = messageText,
                                 isFromUser = true
                             )
-                            // Demo response
-                            messages = messages + ChatMessage(
-                                id = (System.currentTimeMillis() + 1).toString(),
-                                content = "Demo Mode: I received your message \"$messageText\". Install an AI model to get real responses!",
-                                isFromUser = false
-                            )
+                            
+                            messages = messages + userMessage
+                            val inputText = messageText
                             messageText = ""
+                            isGeneratingResponse = true
+                            
+                            // Add loading message
+                            val loadingMessage = ChatMessage(
+                                id = (System.currentTimeMillis() + 1).toString(),
+                                content = "AI is thinking...",
+                                isFromUser = false,
+                                isLoading = true
+                            )
+                            messages = messages + loadingMessage
+                            
+                            // Generate response
+                            coroutineScope.launch {
+                                try {
+                                    // Simple demo response
+                                    val response = "Demo Mode: I received your message '$inputText'. Install an AI model from the Models tab to get real responses!"
+                                    
+                                    // Remove loading message and add real response
+                                    messages = messages.dropLast(1) + ChatMessage(
+                                        id = (System.currentTimeMillis() + 2).toString(),
+                                        content = response,
+                                        isFromUser = false
+                                    )
+                                } catch (e: Exception) {
+                                    // Handle error
+                                    messages = messages.dropLast(1) + ChatMessage(
+                                        id = (System.currentTimeMillis() + 2).toString(),
+                                        content = "Sorry, I encountered an error. Please try again.",
+                                        isFromUser = false
+                                    )
+                                } finally {
+                                    isGeneratingResponse = false
+                                }
+                            }
                         }
                     },
-                    enabled = messageText.isNotBlank()
+                    enabled = messageText.isNotBlank() && !isGeneratingResponse
                 ) {
-                    Icon(Icons.Filled.Send, contentDescription = "Send")
+                    if (isGeneratingResponse) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Icon(Icons.Filled.Send, contentDescription = "Send")
+                    }
                 }
             }
         }
@@ -140,22 +193,34 @@ fun ChatMessageItem(message: ChatMessage) {
                 bottomEnd = if (message.isFromUser) 4.dp else 16.dp
             ),
             colors = CardDefaults.cardColors(
-                containerColor = if (message.isFromUser) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.surfaceVariant
+                containerColor = when {
+                    message.isFromUser -> MaterialTheme.colorScheme.primary
+                    message.isLoading -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
+                    else -> MaterialTheme.colorScheme.surfaceVariant
                 }
             )
         ) {
-            Text(
-                text = message.content,
+            Row(
                 modifier = Modifier.padding(12.dp),
-                color = if (message.isFromUser) {
-                    MaterialTheme.colorScheme.onPrimary
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (message.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(16.dp),
+                        strokeWidth = 2.dp
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
                 }
-            )
+                
+                Text(
+                    text = message.content,
+                    color = if (message.isFromUser) {
+                        MaterialTheme.colorScheme.onPrimary
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    }
+                )
+            }
         }
     }
 }

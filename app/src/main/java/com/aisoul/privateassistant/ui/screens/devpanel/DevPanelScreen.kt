@@ -14,10 +14,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.aisoul.privateassistant.ui.theme.AISoulTheme
+import com.aisoul.privateassistant.core.demo.DemoModeManager
 
 data class DevAction(
     val title: String,
@@ -33,16 +35,20 @@ data class SystemInfo(
 
 @Composable
 fun DevPanelScreen() {
+    val context = LocalContext.current
+    val demoModeManager = remember { DemoModeManager.getInstance(context) }
+    
     var showDemoDialog by remember { mutableStateOf(false) }
     var showClearDataDialog by remember { mutableStateOf(false) }
+    var isDemoModeEnabled by remember { mutableStateOf(demoModeManager.isDemoModeEnabled) }
 
-    val systemInfo = remember {
+    val systemInfo = remember(isDemoModeEnabled) {
         listOf(
             SystemInfo("App Version", "1.0.0-dev"),
             SystemInfo("Build Type", "Debug"),
-            SystemInfo("AI Engine", "TensorFlow Lite"),
+            SystemInfo("AI Engine", if (isDemoModeEnabled) "Demo Mode" else "TensorFlow Lite"),
             SystemInfo("Database", "Room + SQLCipher"),
-            SystemInfo("Demo Mode", "Active"),
+            SystemInfo("Demo Mode", if (isDemoModeEnabled) "Active" else "Disabled"),
             SystemInfo("Installed Models", "0"),
             SystemInfo("Total Conversations", "0"),
             SystemInfo("Database Size", "Empty")
@@ -52,10 +58,13 @@ fun DevPanelScreen() {
     val devActions = remember {
         listOf(
             DevAction(
-                title = "Demo Mode",
-                description = "Toggle demo responses for testing",
+                title = "Toggle Demo Mode",
+                description = "Switch between demo responses and real AI",
                 icon = Icons.Filled.PlayArrow,
-                action = { showDemoDialog = true }
+                action = { 
+                    demoModeManager.isDemoModeEnabled = !demoModeManager.isDemoModeEnabled
+                    isDemoModeEnabled = demoModeManager.isDemoModeEnabled
+                }
             ),
             DevAction(
                 title = "Clear All Data",
@@ -96,7 +105,11 @@ fun DevPanelScreen() {
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.errorContainer
+                    containerColor = if (isDemoModeEnabled) {
+                        MaterialTheme.colorScheme.secondaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.errorContainer
+                    }
                 )
             ) {
                 Row(
@@ -106,20 +119,36 @@ fun DevPanelScreen() {
                     Icon(
                         Icons.Filled.BugReport,
                         contentDescription = "Debug",
-                        tint = MaterialTheme.colorScheme.onErrorContainer
+                        tint = if (isDemoModeEnabled) {
+                            MaterialTheme.colorScheme.onSecondaryContainer
+                        } else {
+                            MaterialTheme.colorScheme.onErrorContainer
+                        }
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(
-                            text = "Debug Build",
+                            text = if (isDemoModeEnabled) "Demo Mode Active" else "Debug Build - Demo Disabled",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onErrorContainer
+                            color = if (isDemoModeEnabled) {
+                                MaterialTheme.colorScheme.onSecondaryContainer
+                            } else {
+                                MaterialTheme.colorScheme.onErrorContainer
+                            }
                         )
                         Text(
-                            text = "This panel is only available in debug builds",
+                            text = if (isDemoModeEnabled) {
+                                "AI responses are simulated for testing"
+                            } else {
+                                "Real AI processing enabled"
+                            },
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onErrorContainer
+                            color = if (isDemoModeEnabled) {
+                                MaterialTheme.colorScheme.onSecondaryContainer
+                            } else {
+                                MaterialTheme.colorScheme.onErrorContainer
+                            }
                         )
                     }
                 }
@@ -186,11 +215,11 @@ fun DevPanelScreen() {
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "• Model inference time: N/A\n" +
+                        text = "• Model inference time: ${if (isDemoModeEnabled) "Demo (800-2000ms simulated)" else "N/A"}\n" +
                                 "• Memory usage: Normal\n" +
                                 "• Battery impact: Minimal\n" +
                                 "• Storage usage: < 1MB\n" +
-                                "• Background processing: Disabled",
+                                "• Background processing: ${if (isDemoModeEnabled) "Simulated" else "Disabled"}",
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -203,7 +232,7 @@ fun DevPanelScreen() {
         AlertDialog(
             onDismissRequest = { showDemoDialog = false },
             title = { Text("Demo Mode") },
-            text = { Text("Demo mode is currently active. All AI responses are simulated.") },
+            text = { Text("Demo mode is currently ${if (isDemoModeEnabled) "active" else "disabled"}. ${if (isDemoModeEnabled) "All AI responses are simulated." else "Real AI processing is enabled."}") },
             confirmButton = {
                 TextButton(onClick = { showDemoDialog = false }) {
                     Text("OK")

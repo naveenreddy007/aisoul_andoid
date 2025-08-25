@@ -1,0 +1,40 @@
+INFO: Constructing runner from config.
+INFO: Configuring Android Instrumentation driver: android_instrumentation_runtime {
+  instrumentation_info {
+    app_package: "com.aisoul.privateassistant"
+    test_package: "com.aisoul.privateassistant.test"
+    test_runner_class: "androidx.test.runner.AndroidJUnitRunner"
+  }
+  instrumentation_args {
+    args_map {
+      key: "additionalTestOutputDir"
+      value: "/sdcard/Android/media/com.aisoul.privateassistant/additional_test_output"
+    }
+  }
+}
+am_instrument_timeout: 31536000
+
+INFO: Configuring AndroidTestApkInstallerPlugin: apks_to_install {
+  apk_paths: "C:\\Users\\bilva_labs\\Desktop\\loltin\\app\\build\\outputs\\apk\\debug\\app-debug.apk"
+  install_options {
+  }
+  uninstall_after_test: true
+}
+apks_to_install {
+  apk_paths: "C:\\Users\\bilva_labs\\Desktop\\loltin\\app\\build\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk"
+  install_options {
+  }
+  uninstall_after_test: true
+}
+
+INFO: No installables found in test fixture. Nothing to install.
+INFO: Installing [C:\Users\bilva_labs\Desktop\loltin\app\build\outputs\apk\debug\app-debug.apk] on device emulator-5554.
+INFO: Installing [C:\Users\bilva_labs\Desktop\loltin\app\build\outputs\apk\androidTest\debug\app-debug-androidTest.apk] on device emulator-5554.
+INFO: Start logcat streaming.
+INFO: Running Android Instrumentation driver.
+INFO: Copying files from device to host: /sdcard/Android/media/com.aisoul.privateassistant/additional_test_output to C:\Users\bilva_labs\Desktop\loltin\app\build\outputs\connected_android_test_additional_output\debugAndroidTest\connected\Medium_Phone_API_36.0(AVD) - 16
+INFO: Stop logcat streaming.
+INFO: Uninstalling com.aisoul.privateassistant for device emulator-5554.
+INFO: Uninstalling com.aisoul.privateassistant.test for device emulator-5554.
+INFO: Execute com.aisoul.privateassistant.DatabaseVerificationTest.testAppLaunchAndNavigation: PASSED
+INFO: Execute com.aisoul.privateassistant.DatabaseVerificationTest.testDatabaseVerification: PASSED

@@ -14,10 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.aisoul.privateassistant.ui.theme.AISoulTheme
+import com.aisoul.privateassistant.services.NotificationListenerService
 
 data class PrivacyStatus(
     val title: String,
@@ -30,11 +32,17 @@ data class Permission(
     val name: String,
     val description: String,
     val isGranted: Boolean,
-    val isRequired: Boolean
+    val isRequired: Boolean,
+    val action: (() -> Unit)? = null
 )
 
 @Composable
 fun PrivacyScreen() {
+    val context = LocalContext.current
+    var notificationAccessGranted by remember { 
+        mutableStateOf<Boolean>(com.aisoul.privateassistant.services.NotificationListenerService.isNotificationAccessGranted(context))
+    }
+    
     val privacyStatuses = remember {
         listOf(
             PrivacyStatus(
@@ -58,13 +66,16 @@ fun PrivacyScreen() {
         )
     }
 
-    val permissions = remember {
+    val permissions = remember(notificationAccessGranted) {
         listOf(
             Permission(
                 name = "Notification Access",
                 description = "Required to analyze and respond to notifications",
-                isGranted = false,
-                isRequired = true
+                isGranted = notificationAccessGranted,
+                isRequired = true,
+                action = {
+                    com.aisoul.privateassistant.services.NotificationListenerService.requestNotificationAccess(context)
+                }
             ),
             Permission(
                 name = "SMS Access",
@@ -128,8 +139,17 @@ fun PrivacyScreen() {
             PermissionCard(
                 permission = permission,
                 onToggle = { permissionName ->
-                    // TODO: Handle permission request
-                    println("Toggle permission: $permissionName")
+                    when (permissionName) {
+                        "Notification Access" -> {
+                            permission.action?.invoke()
+                            // Update status after a delay to check if user granted permission
+                            // In a real app, you'd use a lifecycle observer
+                        }
+                        else -> {
+                            // Handle other permissions
+                            println("Toggle permission: $permissionName")
+                        }
+                    }
                 }
             )
         }
@@ -260,10 +280,19 @@ fun PermissionCard(
                 )
             }
             
-            Switch(
-                checked = permission.isGranted,
-                onCheckedChange = { onToggle(permission.name) }
-            )
+            if (permission.action != null) {
+                Button(
+                    onClick = { onToggle(permission.name) },
+                    enabled = !permission.isGranted
+                ) {
+                    Text(if (permission.isGranted) "Granted" else "Grant")
+                }
+            } else {
+                Switch(
+                    checked = permission.isGranted,
+                    onCheckedChange = { onToggle(permission.name) }
+                )
+            }
         }
     }
 }

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.aisoul.privateassistant.DatabaseVerificationTest" tests="2" failures="0" errors="0" skipped="0" time="5.957" timestamp="2025-08-25T01:59:31" hostname="localhost">
+  <properties>
+    <property name="device" value="Medium_Phone_API_36.0(AVD) - 16" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="testAppLaunchAndNavigation" classname="com.aisoul.privateassistant.DatabaseVerificationTest" time="0.021" />
+  <testcase name="testDatabaseVerification" classname="com.aisoul.privateassistant.DatabaseVerificationTest" time="3.307" />
+</testsuite>

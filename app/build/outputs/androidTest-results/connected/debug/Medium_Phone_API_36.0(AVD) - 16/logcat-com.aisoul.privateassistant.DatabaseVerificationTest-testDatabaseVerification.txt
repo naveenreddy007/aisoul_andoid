@@ -1,0 +1,223 @@
+08-25 07:29:24.432  7309  7336 I TestRunner: started: testDatabaseVerification(com.aisoul.privateassistant.DatabaseVerificationTest)
+08-25 07:29:24.467  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e32d8) locale list changing from [] to [en-US]
+08-25 07:29:24.478  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1c7d58) locale list changing from [] to [en-US]
+08-25 07:29:24.546  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1cb278) locale list changing from [] to [en-US]
+08-25 07:29:24.567  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e35f8) locale list changing from [] to [en-US]
+08-25 07:29:24.580  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1dbf38) locale list changing from [] to [en-US]
+08-25 07:29:24.594  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1df458) locale list changing from [] to [en-US]
+08-25 07:29:24.635  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1ddb58) locale list changing from [] to [en-US]
+08-25 07:29:24.648  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1d9698) locale list changing from [] to [en-US]
+08-25 07:29:24.688  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e61b8) locale list changing from [] to [en-US]
+08-25 07:29:24.701  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1dfa98) locale list changing from [] to [en-US]
+08-25 07:29:24.887  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1cd7f8) locale list changing from [] to [en-US]
+08-25 07:29:24.937  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1dd518) locale list changing from [] to [en-US]
+08-25 07:29:24.949  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e5b78) locale list changing from [] to [en-US]
+08-25 07:29:24.968  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e0d58) locale list changing from [] to [en-US]
+08-25 07:29:25.004  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1ceab8) locale list changing from [] to [en-US]
+08-25 07:29:25.041  7309  7339 D DatabaseVerification: Starting database verification...
+08-25 07:29:25.041   776   967 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+08-25 07:29:25.041  7309  7339 D DatabaseVerification: Test 1: Initializing default models...
+08-25 07:29:25.042   776   967 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+08-25 07:29:25.042   776   967 D InetDiagMessage: Destroyed live tcp sockets for uids={10104} in 4ms
+08-25 07:29:25.059  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e03f8) locale list changing from [] to [en-US]
+08-25 07:29:25.077  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1ca2d8) locale list changing from [] to [en-US]
+08-25 07:29:25.118  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e5858) locale list changing from [] to [en-US]
+08-25 07:29:25.131  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e00d8) locale list changing from [] to [en-US]
+08-25 07:29:25.140  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1ce158) locale list changing from [] to [en-US]
+08-25 07:29:25.145  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e2978) locale list changing from [] to [en-US]
+08-25 07:29:25.161  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1cc218) locale list changing from [] to [en-US]
+08-25 07:29:25.173  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e3c38) locale list changing from [] to [en-US]
+08-25 07:29:25.179  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1c8cf8) locale list changing from [] to [en-US]
+08-25 07:29:25.215  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1dc898) locale list changing from [] to [en-US]
+08-25 07:29:25.226  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1ee4f8) locale list changing from [] to [en-US]
+08-25 07:29:25.234  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e3f58) locale list changing from [] to [en-US]
+08-25 07:29:25.268  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e7478) locale list changing from [] to [en-US]
+08-25 07:29:25.303  2091  2091 I Finsky  : [2] SCH: job service start with id 9414.
+08-25 07:29:25.431  2091  2341 I Finsky  : [58] SCH: Scheduling phonesky job Id: 1-1337, CT: 1756071099360, Constraints: [{ L: 39306118, D: 82506118, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+08-25 07:29:25.432  2091  2341 I Finsky  : [58] SCH: Scheduling phonesky job Id: 12-1, CT: 1756087150814, Constraints: [{ L: 15000, D: 86400000, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+08-25 07:29:25.480  2091  2360 I Finsky  : [64] SCH: Scheduling 1 system job(s)
+08-25 07:29:25.481  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e1cf8) locale list changing from [] to [en-US]
+08-25 07:29:25.482  2091  2360 I Finsky  : [64] SCH: Scheduling system job Id: 9421, L: 0, D: 66439998, C: false, I: false, N: 1
+08-25 07:29:25.514  2091  2091 I Finsky  : [2] SCH: job service start with id 9421.
+08-25 07:29:25.516  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e2658) locale list changing from [] to [en-US]
+08-25 07:29:25.544  2091  7318 I Finsky  : [225] SCH: job service finished with id 9414.
+08-25 07:29:25.563  2091  2097 W android.vending: Suspending all threads took: 8.598ms
+08-25 07:29:25.571  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e1398) locale list changing from [] to [en-US]
+08-25 07:29:25.580  2091  2361 I Finsky  : [65] SCH: Scheduling phonesky job Id: 1-1337, CT: 1756071099360, Constraints: [{ L: 39306118, D: 82506118, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+08-25 07:29:25.580  2091  2361 I Finsky  : [65] SCH: Scheduling phonesky job Id: 12-1, CT: 1756087150814, Constraints: [{ L: 15000, D: 86400000, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+08-25 07:29:25.598  2091  2360 I Finsky  : [64] SCH: Scheduling 1 system job(s)
+08-25 07:29:25.598  2091  2360 I Finsky  : [64] SCH: Scheduling system job Id: 9423, L: 0, D: 66439880, C: false, I: false, N: 1
+08-25 07:29:25.645  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1e4bd8) locale list changing from [] to [en-US]
+08-25 07:29:25.665  2091  2091 I Finsky  : [2] SCH: job service start with id 9423.
+08-25 07:29:25.675  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1cf0f8) locale list changing from [] to [en-US]
+08-25 07:29:25.686  2091  7318 I Finsky  : [225] SCH: job service finished with id 9421.
+08-25 07:29:25.734  2091  2341 I Finsky  : [58] SCH: Scheduling phonesky job Id: 1-1337, CT: 1756071099360, Constraints: [{ L: 39306118, D: 82506118, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+08-25 07:29:25.734  2091  2341 I Finsky  : [58] SCH: Scheduling phonesky job Id: 12-1, CT: 1756087150814, Constraints: [{ L: 15000, D: 86400000, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+08-25 07:29:25.755  2091  2360 I Finsky  : [64] SCH: Scheduling 1 system job(s)
+08-25 07:29:25.755  2091  2360 I Finsky  : [64] SCH: Scheduling system job Id: 9425, L: 0, D: 66439723, C: false, I: false, N: 1
+08-25 07:29:25.757  1533  1613 I .apps.wellbeing: AssetManager2(0x74b04d1c86b8) locale list changing from [] to [en-US]
+08-25 07:29:25.780  2091  2091 I Finsky  : [2] SCH: job service start with id 9425.
+08-25 07:29:25.798  2091  7318 I Finsky  : [225] SCH: job service finished with id 9423.
+08-25 07:29:25.835  2091  2334 I Finsky  : [54] SCH: Scheduling phonesky job Id: 1-1337, CT: 1756071099360, Constraints: [{ L: 39306118, D: 82506118, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+08-25 07:29:25.835  2091  2334 I Finsky  : [54] SCH: Scheduling phonesky job Id: 12-1, CT: 1756087150814, Constraints: [{ L: 15000, D: 86400000, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+08-25 07:29:25.849  2091  2361 I Finsky  : [65] SCH: Scheduling 1 system job(s)
+08-25 07:29:25.850  2091  2361 I Finsky  : [65] SCH: Scheduling system job Id: 9427, L: 0, D: 66439628, C: false, I: false, N: 1
+08-25 07:29:25.886  2091  7318 I Finsky  : [225] SCH: job service finished with id 9425.
+08-25 07:29:25.914  2091  2091 I Finsky  : [2] SCH: job service start with id 9427.
+08-25 07:29:25.930  2091  7191 I Finsky  : [212] SCH: Satisfied jobs for 9427 are: 12-1
+08-25 07:29:25.941  1533  1540 W .apps.wellbeing: Suspending all threads took: 8.463ms
+08-25 07:29:25.957  2091  7318 I Finsky  : [225] SCH: Job 12-1 starting
+08-25 07:29:25.971  2091  2091 I Finsky  : [2] WM::SCH: Logging work start for 12-1
+08-25 07:29:25.984  2091  2091 I Finsky  : [2] [ContentSync] job started
+08-25 07:29:25.988  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1ca918) locale list changing from [] to [en-US]
+08-25 07:29:26.003  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d8d38) locale list changing from [] to [en-US]
+08-25 07:29:26.041  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d5e58) locale list changing from [] to [en-US]
+08-25 07:29:26.047  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d3bf8) locale list changing from [] to [en-US]
+08-25 07:29:26.066  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d67b8) locale list changing from [] to [en-US]
+08-25 07:29:26.075  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1eb2f8) locale list changing from [] to [en-US]
+08-25 07:29:26.089  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d1fd8) locale list changing from [] to [en-US]
+08-25 07:29:26.109  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e3c38) locale list changing from [] to [en-US]
+08-25 07:29:26.121  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e48b8) locale list changing from [] to [en-US]
+08-25 07:29:26.131  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1cc218) locale list changing from [] to [en-US]
+08-25 07:29:26.167  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c9338) locale list changing from [] to [en-US]
+08-25 07:29:26.171  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e2978) locale list changing from [] to [en-US]
+08-25 07:29:26.181  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1ce158) locale list changing from [] to [en-US]
+08-25 07:29:26.190  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e00d8) locale list changing from [] to [en-US]
+08-25 07:29:26.205  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e5858) locale list changing from [] to [en-US]
+08-25 07:29:26.214  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c9978) locale list changing from [] to [en-US]
+08-25 07:29:26.216  2091  2201 I android.vending: Waiting for a blocking GC ProfileSaver
+08-25 07:29:26.220  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c8cf8) locale list changing from [] to [en-US]
+08-25 07:29:26.260  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1df138) locale list changing from [] to [en-US]
+08-25 07:29:26.305  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c9658) locale list changing from [] to [en-US]
+08-25 07:29:26.368  2091  2201 I android.vending: WaitForGcToComplete blocked ProfileSaver on Background for 152.694ms
+08-25 07:29:26.398  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e5b78) locale list changing from [] to [en-US]
+08-25 07:29:26.423  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1dd518) locale list changing from [] to [en-US]
+08-25 07:29:26.451  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e0d58) locale list changing from [] to [en-US]
+08-25 07:29:26.465  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d9cd8) locale list changing from [] to [en-US]
+08-25 07:29:26.476  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1dfa98) locale list changing from [] to [en-US]
+08-25 07:29:26.482  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e5e98) locale list changing from [] to [en-US]
+08-25 07:29:26.488  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1dd838) locale list changing from [] to [en-US]
+08-25 07:29:26.494  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1de7d8) locale list changing from [] to [en-US]
+08-25 07:29:26.495  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d9698) locale list changing from [] to [en-US]
+08-25 07:29:26.497  2091  7344 I Finsky  : [227] App states replicator found 7 unowned apps
+08-25 07:29:26.502  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c0cd8) locale list changing from [] to [en-US]
+08-25 07:29:26.510  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e35f8) locale list changing from [] to [en-US]
+08-25 07:29:26.522  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1cb278) locale list changing from [] to [en-US]
+08-25 07:29:26.562  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1cb8b8) locale list changing from [] to [en-US]
+08-25 07:29:26.569  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1dc258) locale list changing from [] to [en-US]
+08-25 07:29:26.590  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d7a78) locale list changing from [] to [en-US]
+08-25 07:29:26.603  2091  7344 I Finsky  : [227] Completed 0 account content syncs with 0 successful.
+08-25 07:29:26.604  2091  2091 I Finsky  : [2] [ContentSync] Installation state replication succeeded.
+08-25 07:29:26.604  2091  2091 I Finsky  : [2] SCH: jobFinished: 12-1. TimeElapsed: 634ms.
+08-25 07:29:26.604  2091  2091 I Finsky  : [2] WM::SCH: Logging work end for 12-1
+08-25 07:29:26.617  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d4878) locale list changing from [] to [en-US]
+08-25 07:29:26.632  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1cbef8) locale list changing from [] to [en-US]
+08-25 07:29:26.641  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e32d8) locale list changing from [] to [en-US]
+08-25 07:29:26.652  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e4ef8) locale list changing from [] to [en-US]
+08-25 07:29:26.661  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e99f8) locale list changing from [] to [en-US]
+08-25 07:29:26.668  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e19d8) locale list changing from [] to [en-US]
+08-25 07:29:26.688  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e3918) locale list changing from [] to [en-US]
+08-25 07:29:26.703  2091  2360 I Finsky  : [64] SCH: Scheduling phonesky job Id: 1-1337, CT: 1756071099360, Constraints: [{ L: 39306118, D: 82506118, C: CHARGING_NONE, I: IDLE_NONE, N: NET_ANY, B: BATTERY_ANY }]
+08-25 07:29:26.703  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c25d8) locale list changing from [] to [en-US]
+08-25 07:29:26.708  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1dfdb8) locale list changing from [] to [en-US]
+08-25 07:29:26.722  2091  2361 I Finsky  : [65] SCH: Scheduling 1 system job(s)
+08-25 07:29:26.723  2091  2361 I Finsky  : [65] SCH: Scheduling system job Id: 9429, L: 23238755, D: 66438755, C: false, I: false, N: 1
+08-25 07:29:26.723  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e16b8) locale list changing from [] to [en-US]
+08-25 07:29:26.749  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1df778) locale list changing from [] to [en-US]
+08-25 07:29:26.769  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c2c18) locale list changing from [] to [en-US]
+08-25 07:29:26.782  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c6a98) locale list changing from [] to [en-US]
+08-25 07:29:26.783  2091  7318 I Finsky  : [225] SCH: job service finished with id 9427.
+08-25 07:29:26.789  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c0058) locale list changing from [] to [en-US]
+08-25 07:29:26.792  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c1958) locale list changing from [] to [en-US]
+08-25 07:29:26.815  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1bcb38) locale list changing from [] to [en-US]
+08-25 07:29:26.824  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c70d8) locale list changing from [] to [en-US]
+08-25 07:29:26.839  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c28f8) locale list changing from [] to [en-US]
+08-25 07:29:26.843  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e6b18) locale list changing from [] to [en-US]
+08-25 07:29:26.847  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1bea78) locale list changing from [] to [en-US]
+08-25 07:29:26.849  2091  2091 I Finsky  : [2] Memory trim requested to level 40
+08-25 07:29:26.851  2091  2091 I Finsky  : [2] Flushing in-memory image cache
+08-25 07:29:26.863  2502  2502 I Finsky:background: [2] Memory trim requested to level 40
+08-25 07:29:26.863  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1ccb78) locale list changing from [] to [en-US]
+08-25 07:29:26.875  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c9fb8) locale list changing from [] to [en-US]
+08-25 07:29:26.881  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c1f98) locale list changing from [] to [en-US]
+08-25 07:29:26.891  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d2f78) locale list changing from [] to [en-US]
+08-25 07:29:26.895  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d3298) locale list changing from [] to [en-US]
+08-25 07:29:26.904  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d1358) locale list changing from [] to [en-US]
+08-25 07:29:26.920  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1cc538) locale list changing from [] to [en-US]
+08-25 07:29:26.925  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c3898) locale list changing from [] to [en-US]
+08-25 07:29:26.935  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1de198) locale list changing from [] to [en-US]
+08-25 07:29:26.939  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d7d98) locale list changing from [] to [en-US]
+08-25 07:29:26.950  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1dee18) locale list changing from [] to [en-US]
+08-25 07:29:26.957  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d3f18) locale list changing from [] to [en-US]
+08-25 07:29:26.959  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1dac78) locale list changing from [] to [en-US]
+08-25 07:29:26.962  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d54f8) locale list changing from [] to [en-US]
+08-25 07:29:26.966  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1dcbb8) locale list changing from [] to [en-US]
+08-25 07:29:26.979  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d1678) locale list changing from [] to [en-US]
+08-25 07:29:26.980  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d5818) locale list changing from [] to [en-US]
+08-25 07:29:26.984  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1cfd78) locale list changing from [] to [en-US]
+08-25 07:29:26.989  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d1998) locale list changing from [] to [en-US]
+08-25 07:29:26.992  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d6178) locale list changing from [] to [en-US]
+08-25 07:29:26.995  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d6ad8) locale list changing from [] to [en-US]
+08-25 07:29:26.998  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d06d8) locale list changing from [] to [en-US]
+08-25 07:29:27.001  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d2c58) locale list changing from [] to [en-US]
+08-25 07:29:27.005  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1cf738) locale list changing from [] to [en-US]
+08-25 07:29:27.009  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c0ff8) locale list changing from [] to [en-US]
+08-25 07:29:27.013  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d5b38) locale list changing from [] to [en-US]
+08-25 07:29:27.019  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d7118) locale list changing from [] to [en-US]
+08-25 07:29:27.026  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1dde78) locale list changing from [] to [en-US]
+08-25 07:29:27.031  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d0d18) locale list changing from [] to [en-US]
+08-25 07:29:27.036  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d7758) locale list changing from [] to [en-US]
+08-25 07:29:27.040  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1ee1d8) locale list changing from [] to [en-US]
+08-25 07:29:27.042  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1edeb8) locale list changing from [] to [en-US]
+08-25 07:29:27.045  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e2c98) locale list changing from [] to [en-US]
+08-25 07:29:27.050  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1eb938) locale list changing from [] to [en-US]
+08-25 07:29:27.054  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c8398) locale list changing from [] to [en-US]
+08-25 07:29:27.057  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d6df8) locale list changing from [] to [en-US]
+08-25 07:29:27.059  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d1cb8) locale list changing from [] to [en-US]
+08-25 07:29:27.067  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d2618) locale list changing from [] to [en-US]
+08-25 07:29:27.071  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d03b8) locale list changing from [] to [en-US]
+08-25 07:29:27.078  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e93b8) locale list changing from [] to [en-US]
+08-25 07:29:27.085  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1cd4d8) locale list changing from [] to [en-US]
+08-25 07:29:27.090  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d4238) locale list changing from [] to [en-US]
+08-25 07:29:27.095  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c9c98) locale list changing from [] to [en-US]
+08-25 07:29:27.101  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d22f8) locale list changing from [] to [en-US]
+08-25 07:29:27.104  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1cedd8) locale list changing from [] to [en-US]
+08-25 07:29:27.109  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d4b98) locale list changing from [] to [en-US]
+08-25 07:29:27.110  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c7718) locale list changing from [] to [en-US]
+08-25 07:29:27.115  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c6138) locale list changing from [] to [en-US]
+08-25 07:29:27.127  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1daf98) locale list changing from [] to [en-US]
+08-25 07:29:27.130  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c6db8) locale list changing from [] to [en-US]
+08-25 07:29:27.132  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c4b58) locale list changing from [] to [en-US]
+08-25 07:29:27.156  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d4eb8) locale list changing from [] to [en-US]
+08-25 07:29:27.162  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d1038) locale list changing from [] to [en-US]
+08-25 07:29:27.168  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c09b8) locale list changing from [] to [en-US]
+08-25 07:29:27.172  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1dd1f8) locale list changing from [] to [en-US]
+08-25 07:29:27.177  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1db8f8) locale list changing from [] to [en-US]
+08-25 07:29:27.179  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1da318) locale list changing from [] to [en-US]
+08-25 07:29:27.181  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d7438) locale list changing from [] to [en-US]
+08-25 07:29:27.184  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1dc578) locale list changing from [] to [en-US]
+08-25 07:29:27.185  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1db5d8) locale list changing from [] to [en-US]
+08-25 07:29:27.187  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d9058) locale list changing from [] to [en-US]
+08-25 07:29:27.200  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1d86f8) locale list changing from [] to [en-US]
+08-25 07:29:27.205  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1dced8) locale list changing from [] to [en-US]
+08-25 07:29:27.208  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1deaf8) locale list changing from [] to [en-US]
+08-25 07:29:27.210  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1db2b8) locale list changing from [] to [en-US]
+08-25 07:29:27.214  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1cb598) locale list changing from [] to [en-US]
+08-25 07:29:27.218  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c3bb8) locale list changing from [] to [en-US]
+08-25 07:29:27.220  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c89d8) locale list changing from [] to [en-US]
+08-25 07:29:27.221  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c5e18) locale list changing from [] to [en-US]
+08-25 07:29:27.245  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1c3258) locale list changing from [] to [en-US]
+08-25 07:29:27.249  1533  1614 I .apps.wellbeing: AssetManager2(0x74b04d1e2338) locale list changing from [] to [en-US]
+08-25 07:29:27.279  7309  7339 D nativeloader: Load /data/app/~~W2gJ4s2DIdIuf1DevlTpsA==/com.aisoul.privateassistant-OYnL-YjJF07OhBhFHTElqA==/base.apk!/lib/x86_64/libsqlcipher.so using class loader ns clns-9 (caller=/data/app/~~W2gJ4s2DIdIuf1DevlTpsA==/com.aisoul.privateassistant-OYnL-YjJF07OhBhFHTElqA==/base.apk!classes12.dex): ok
+08-25 07:29:27.690  7309  7339 D DatabaseVerification: ✓ Default models initialized
+08-25 07:29:27.693  7309  7339 D DatabaseVerification: Test 2: Creating test conversation...
+08-25 07:29:27.711  7309  7339 D DatabaseVerification: ✓ Test conversation created with ID: 1
+08-25 07:29:27.711  7309  7339 D DatabaseVerification: Test 3: Adding test messages...
+08-25 07:29:27.731  7309  7341 D DatabaseVerification: ✓ Test messages created - User: 1, AI: 2
+08-25 07:29:27.732  7309  7341 D DatabaseVerification: Test 4: Verifying data retrieval...
+08-25 07:29:27.732  7309  7341 D DatabaseVerification: ✓ Database queries are properly configured
+08-25 07:29:27.732  7309  7341 D DatabaseVerification: Test 5: Testing AI model operations...
+08-25 07:29:27.734  7309  7341 D DatabaseVerification: ✓ Test AI model inserted
+08-25 07:29:27.757  7309  7341 D DatabaseVerification: ✓ Active model set successfully
+08-25 07:29:27.757  7309  7341 D DatabaseVerification: All database verification tests passed!
+08-25 07:29:27.773  7309  7336 I TestRunner: finished: testDatabaseVerification(com.aisoul.privateassistant.DatabaseVerificationTest)

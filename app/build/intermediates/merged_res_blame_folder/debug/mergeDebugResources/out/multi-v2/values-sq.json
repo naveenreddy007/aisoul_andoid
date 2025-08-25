@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.aisoul.privateassistant.app-mergeDebugResources-56:/values-sq/values-sq.xml",
+            "outputFile": "com.aisoul.privateassistant.app-mergeDebugResources-63:/values-sq/values-sq.xml",
             "map": [
                 {
                     "source": "C:\\Users\\bilva_labs\\.gradle\\caches\\8.13\\transforms\\53e8c6d6fdda1d76f7b273dcb400cc5f\\transformed\\jetified-ui-release\\res\\values-sq\\values-sq.xml",

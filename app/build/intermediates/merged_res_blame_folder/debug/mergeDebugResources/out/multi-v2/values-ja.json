@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.aisoul.privateassistant.app-mergeDebugResources-56:/values-ja/values-ja.xml",
+            "outputFile": "com.aisoul.privateassistant.app-mergeDebugResources-63:/values-ja/values-ja.xml",
             "map": [
                 {
                     "source": "C:\\Users\\bilva_labs\\.gradle\\caches\\8.13\\transforms\\adf1e34dc5edf84daad7902d0b770b14\\transformed\\core-1.12.0\\res\\values-ja\\values-ja.xml",
