@@ -89,7 +89,7 @@ class NotificationListenerService : NotificationListenerService() {
                 // 3. Generate smart responses if needed
                 // 4. Show AI suggestions to user
                 
-                Log.d(TAG, "Demo Mode: Processed notification - Title: $title, Text: $bigText")
+                Log.d(TAG, "Processed notification - Title: $title, Text: $bigText")
             }
             
         } catch (e: Exception) {

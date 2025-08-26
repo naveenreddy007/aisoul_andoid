@@ -84,11 +84,9 @@ dependencies {
     implementation 'androidx.compose.material:material-icons-core'
     implementation 'androidx.compose.material:material-icons-extended'
     
-    // TensorFlow Lite for AI/ML
-    implementation 'org.tensorflow:tensorflow-lite:2.14.0'
-    implementation 'org.tensorflow:tensorflow-lite-gpu:2.14.0'
-    implementation 'org.tensorflow:tensorflow-lite-support:0.4.4'
-    implementation 'org.tensorflow:tensorflow-lite-task-text:0.4.4'
+    // MediaPipe LLM Inference API for on-device AI processing
+    implementation 'com.google.mediapipe:tasks-text:0.10.9'
+    implementation 'com.google.mediapipe:tasks-core:0.10.9'
     
     // HTTP client for model downloads
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'

@@ -10,6 +10,8 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.aisoul.privateassistant.data.database.AppDatabase
+import com.aisoul.privateassistant.ai.AIModelManager
+import com.aisoul.privateassistant.ai.AIInferenceEngine
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,6 +44,8 @@ class PerformanceManager private constructor(private val context: Context) : Def
     }
     
     private val database = AppDatabase.getDatabase(context)
+    private val aiModelManager = AIModelManager.getInstance(context)
+    private val aiInferenceEngine = AIInferenceEngine.getInstance(context)
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     
     // State management
@@ -78,11 +82,15 @@ class PerformanceManager private constructor(private val context: Context) : Def
         val appStartupTime: Long = 0,
         val databaseQueryAverageTime: Long = 0,
         val aiInferenceAverageTime: Long = 0,
+        val mediaPipeModelLoadTime: Long = 0,
+        val mediaPipeInferenceTime: Long = 0,
         val uiRenderingAverageTime: Long = 0,
         val networkRequestAverageTime: Long = 0,
         val backgroundTasksCount: Int = 0,
         val cacheHitRate: Float = 0f,
-        val batteryOptimized: Boolean = false
+        val batteryOptimized: Boolean = false,
+        val mediaPipeMemoryUsage: Long = 0,
+        val activeModelsCount: Int = 0
     )
     
     data class PerformanceAlert(
@@ -99,7 +107,11 @@ class PerformanceManager private constructor(private val context: Context) : Def
         UI_THREAD_BLOCKED,
         BATTERY_DRAIN,
         STORAGE_LOW,
-        NETWORK_SLOW
+        NETWORK_SLOW,
+        MEDIAPIPE_MODEL_LOAD_SLOW,
+        MEDIAPIPE_INFERENCE_SLOW,
+        MEDIAPIPE_MEMORY_LEAK,
+        TOO_MANY_MODELS_LOADED
     }
     
     enum class Severity {
@@ -148,6 +160,9 @@ class PerformanceManager private constructor(private val context: Context) : Def
                 try {
                     // Monitor memory usage
                     monitorMemoryUsage()
+                    
+                    // Monitor MediaPipe AI performance
+                    monitorMediaPipePerformance()
                     
                     // Monitor database performance
                     monitorDatabasePerformance()
@@ -226,6 +241,55 @@ class PerformanceManager private constructor(private val context: Context) : Def
     }
     
     /**
+     * Monitor MediaPipe AI performance and resource usage
+     */
+    private suspend fun monitorMediaPipePerformance() {
+        try {
+            // Check loaded models
+            val availableModels = aiModelManager.getAvailableModels()
+            val loadedModels = availableModels.filter { it.isLoaded }
+            val activeModelsCount = loadedModels.size
+            
+            // Estimate MediaPipe memory usage
+            val mediaPipeMemoryUsage = estimateMediaPipeMemoryUsage(loadedModels)
+            
+            // Test inference performance if models are loaded
+            var inferenceTime = 0L
+            if (loadedModels.isNotEmpty()) {
+                inferenceTime = measureTimeMillis {
+                    try {
+                        // Quick inference test with minimal input
+                        aiInferenceEngine.generateResponse(
+                            input = "test",
+                            conversationHistory = emptyList()
+                        )
+                    } catch (e: Exception) {
+                        Log.w(TAG, "MediaPipe inference test failed", e)
+                    }
+                }
+            }
+            
+            // Update metrics
+            val currentMetrics = _performanceMetrics.value
+            _performanceMetrics.value = currentMetrics.copy(
+                mediaPipeInferenceTime = if (inferenceTime > 0) {
+                    (currentMetrics.mediaPipeInferenceTime + inferenceTime) / 2
+                } else currentMetrics.mediaPipeInferenceTime,
+                mediaPipeMemoryUsage = mediaPipeMemoryUsage,
+                activeModelsCount = activeModelsCount
+            )
+            
+            // Check for MediaPipe-specific alerts
+            checkMediaPipeAlerts(loadedModels, inferenceTime, mediaPipeMemoryUsage)
+            
+            Log.d(TAG, "MediaPipe performance: models=$activeModelsCount, inference=${inferenceTime}ms, memory=${mediaPipeMemoryUsage}MB")
+            
+        } catch (e: Exception) {
+            Log.e(TAG, "Error monitoring MediaPipe performance", e)
+        }
+    }
+    
+    /**
      * Monitor background tasks
      */
     private suspend fun monitorBackgroundTasks() {
@@ -288,6 +352,9 @@ class PerformanceManager private constructor(private val context: Context) : Def
             
             // Clear caches
             clearInMemoryCaches()
+            
+            // Optimize MediaPipe performance
+            optimizeMediaPipePerformance()
             
             // Run garbage collection
             System.gc()
@@ -379,6 +446,97 @@ class PerformanceManager private constructor(private val context: Context) : Def
         // Clear conversation caches
         // Clear AI model caches (if applicable)
         Log.d(TAG, "Cleared in-memory caches")
+    }
+    
+    /**
+     * Estimate MediaPipe memory usage based on loaded models
+     */
+    private fun estimateMediaPipeMemoryUsage(loadedModels: List<com.aisoul.privateassistant.ai.ModelInfo>): Long {
+        return loadedModels.sumOf { model ->
+            when (model.type) {
+                AIModelManager.ModelType.GEMMA_2B -> 512L // ~512MB in memory
+                AIModelManager.ModelType.GEMMA_7B -> 1024L // ~1GB in memory
+                AIModelManager.ModelType.PHI2_3B -> 768L // ~768MB in memory
+                else -> 256L // Default estimate
+            }
+        }
+    }
+    
+    /**
+     * Check for MediaPipe-specific performance alerts
+     */
+    private suspend fun checkMediaPipeAlerts(
+        loadedModels: List<com.aisoul.privateassistant.ai.ModelInfo>,
+        inferenceTime: Long,
+        memoryUsage: Long
+    ) {
+        // Too many models loaded alert
+        if (loadedModels.size > 2) {
+            createPerformanceAlert(
+                AlertType.TOO_MANY_MODELS_LOADED,
+                "${loadedModels.size} MediaPipe models are loaded simultaneously",
+                Severity.MEDIUM,
+                "Consider unloading unused models to save memory"
+            )
+        }
+        
+        // Slow MediaPipe inference alert
+        if (inferenceTime > 5000) { // More than 5 seconds
+            createPerformanceAlert(
+                AlertType.MEDIAPIPE_INFERENCE_SLOW,
+                "MediaPipe inference took ${inferenceTime}ms",
+                Severity.HIGH,
+                "Consider using a smaller model or optimizing device performance"
+            )
+        }
+        
+        // High MediaPipe memory usage alert
+        if (memoryUsage > 2048) { // More than 2GB
+            createPerformanceAlert(
+                AlertType.MEDIAPIPE_MEMORY_LEAK,
+                "MediaPipe models are using ${memoryUsage}MB of memory",
+                Severity.HIGH,
+                "Consider unloading large models or checking for memory leaks"
+            )
+        }
+    }
+    
+    /**
+     * Optimize MediaPipe performance
+     */
+    private suspend fun optimizeMediaPipePerformance() {
+        try {
+            Log.i(TAG, "Starting MediaPipe optimization")
+            
+            val availableModels = aiModelManager.getAvailableModels()
+            val loadedModels = availableModels.filter { it.isLoaded }
+            
+            // If memory is low, unload unnecessary models
+            if (_memoryUsage.value.isLowMemory && loadedModels.size > 1) {
+                // Keep only the smallest model loaded
+                val modelsToUnload = loadedModels.sortedByDescending { model ->
+                    when (model.type) {
+                        AIModelManager.ModelType.GEMMA_7B -> 3
+                        AIModelManager.ModelType.PHI2_3B -> 2
+                        AIModelManager.ModelType.GEMMA_2B -> 1
+                        else -> 0
+                    }
+                }.drop(1) // Keep the first (smallest) model
+                
+                modelsToUnload.forEach { model ->
+                    aiModelManager.unloadModel(model.type)
+                    Log.i(TAG, "Unloaded MediaPipe model: ${model.type.displayName}")
+                }
+            }
+            
+            // Clean up MediaPipe resources
+            aiInferenceEngine.cleanup()
+            
+            Log.i(TAG, "MediaPipe optimization completed")
+            
+        } catch (e: Exception) {
+            Log.e(TAG, "Error during MediaPipe optimization", e)
+        }
     }
     
     /**

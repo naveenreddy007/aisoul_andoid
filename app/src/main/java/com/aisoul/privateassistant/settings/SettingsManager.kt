@@ -132,7 +132,7 @@ class SettingsManager private constructor(private val context: Context) {
     }
     
     enum class AIModelType {
-        GEMMA_2B, GEMMA_7B, PHI3_MINI, CUSTOM
+        GEMMA_2B, GEMMA_7B, CUSTOM
     }
     
     enum class ResponseStyle {

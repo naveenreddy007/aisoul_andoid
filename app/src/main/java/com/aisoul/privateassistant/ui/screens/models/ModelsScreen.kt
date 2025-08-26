@@ -12,6 +12,8 @@ import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.CloudDownload
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,14 +25,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import com.aisoul.privateassistant.ai.AIModelManager
 import com.aisoul.privateassistant.ai.ModelDownloadService
 import com.aisoul.privateassistant.ai.ModelInfo
 import com.aisoul.privateassistant.ui.theme.AISoulTheme
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import java.io.File
+import java.io.FileOutputStream
 import kotlin.random.Random
 
 @Composable
@@ -180,6 +190,16 @@ fun ModelsScreen() {
         )
         
         Spacer(modifier = Modifier.height(16.dp))
+        
+        // Manual Download Card
+        ManualDownloadCard(
+            onManualDownload = { modelName: String, downloadUrl: String, sizeMB: Int ->
+                scope.launch {
+                    Log.d("ModelsScreen", "📥 Starting manual download: $modelName from $downloadUrl")
+                    ModelDownloadService.startManualDownload(context, modelName, downloadUrl, sizeMB)
+                }
+            }
+        )
         
         // Active downloads status
         if (downloadProgress.isNotEmpty()) {
@@ -563,7 +583,6 @@ fun ModelCard(
     onDelete: (AIModelManager.ModelType) -> Unit
 ) {
     val modelType = modelInfo.type
-    val isGemma3_270M = modelType == AIModelManager.ModelType.GEMMA_3_270M
     val isDownloading = downloadProgress?.isActive == true
     
     Card(
@@ -571,13 +590,11 @@ fun ModelCard(
         colors = CardDefaults.cardColors(
             containerColor = when {
                 isDownloading -> MaterialTheme.colorScheme.secondaryContainer
-                isGemma3_270M -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                 else -> MaterialTheme.colorScheme.surface
             }
         ),
         border = when {
             isDownloading -> BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
-            isGemma3_270M -> BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
             else -> null
         }
     ) {
@@ -596,15 +613,6 @@ fun ModelCard(
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
-                        if (isGemma3_270M) {
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Icon(
-                                Icons.Filled.Star,
-                                contentDescription = "Recommended",
-                                tint = Color(0xFFFFD700), // Gold color
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
                         if (isDownloading) {
                             Spacer(modifier = Modifier.width(8.dp))
                             CircularProgressIndicator(
@@ -612,21 +620,6 @@ fun ModelCard(
                                 strokeWidth = 2.dp
                             )
                         }
-                    }
-                    if (isGemma3_270M) {
-                        Text(
-                            text = "🎆 NEW! 270M Parameters - Ultimate Efficiency",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top = 2.dp)
-                        )
-                        Text(
-                            text = "⚡ Uses only 0.75% battery per 25 conversations",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFF4CAF50),
-                            modifier = Modifier.padding(top = 2.dp)
-                        )
                     }
                     
                     // Show download progress if downloading
@@ -655,22 +648,7 @@ fun ModelCard(
                 }
                 
                 // Show compatibility indicator
-                if (isGemma3_270M) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(
-                            Icons.Filled.Check,
-                            contentDescription = "Ultra Compatible",
-                            tint = Color(0xFF4CAF50),
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(
-                            text = "PERFECT",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFF4CAF50),
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                } else if (!modelInfo.isCompatible) {
+                if (!modelInfo.isCompatible) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
                             Icons.Filled.Warning,
@@ -703,14 +681,7 @@ fun ModelCard(
                         text = "Min RAM: ${if (modelType.minRamMB < 1024) "${modelType.minRamMB}MB" else "${modelType.minRamMB / 1024}GB"}",
                         style = MaterialTheme.typography.labelMedium
                     )
-                    if (isGemma3_270M) {
-                        Text(
-                            text = "🚀 270M Parameters",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+
                 }
                 Column {
                     Text(
@@ -724,13 +695,7 @@ fun ModelCard(
                             style = MaterialTheme.typography.labelMedium
                         )
                     }
-                    if (isGemma3_270M) {
-                        Text(
-                            text = "✅ Runs everywhere",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFF4CAF50)
-                        )
-                    }
+
                 }
             }
 
@@ -746,10 +711,10 @@ fun ModelCard(
                 onDelete = onDelete
             )
 
-            // Show advisory message only for non-270M models that might be slow
-            if (!modelInfo.isCompatible && !isGemma3_270M) {
+            // Show advisory message for models that might be slow
+            if (!modelInfo.isCompatible) {
                 Text(
-                    text = "⚠️ This model may run slowly but download is permitted. Try Gemma 3 270M for optimal performance.",
+                    text = "⚠️ This model may run slowly but download is permitted. Try Gemma 2B for optimal performance.",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.padding(top = 8.dp)
@@ -883,6 +848,537 @@ fun getModelStatusColor(modelInfo: ModelInfo): androidx.compose.ui.graphics.Colo
         modelInfo.isDownloaded -> MaterialTheme.colorScheme.primary
         !modelInfo.isCompatible -> MaterialTheme.colorScheme.error
         else -> MaterialTheme.colorScheme.onSurfaceVariant
+    }
+}
+
+@Composable
+fun ManualDownloadCard(
+    onManualDownload: (modelName: String, downloadUrl: String, sizeMB: Int) -> Unit
+) {
+    val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
+    var showUploadDialog by remember { mutableStateOf(false) }
+    var modelName by remember { mutableStateOf("") }
+    var downloadUrl by remember { mutableStateOf("") }
+    var modelSize by remember { mutableStateOf("") }
+    var showPresets by remember { mutableStateOf(false) }
+    var uploadStatus by remember { mutableStateOf("") }
+    
+    // Coroutine scope for async operations within this card
+    val scope = rememberCoroutineScope()
+    
+    // File picker launcher - specifically for model files
+    val filePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri: Uri? ->
+        uri?.let { selectedUri ->
+            try {
+                val fileName = getFileName(context, selectedUri) ?: "unknown_model.bin"
+                val fileSize = getFileSize(context, selectedUri)
+                
+                // Validate file extension
+                val isValidModel = fileName.endsWith(".bin", ignoreCase = true) || 
+                                 fileName.endsWith(".tflite", ignoreCase = true)
+                
+                if (!isValidModel) {
+                    uploadStatus = "⚠️ Invalid file type: Only .bin and .tflite files are supported"
+                    return@let
+                }
+                
+                uploadStatus = "📤 Uploading $fileName (${fileSize}MB)..."
+                
+                // Copy file to app's internal storage
+                val success = copyModelFile(context, selectedUri, fileName)
+                
+                if (success) {
+                    uploadStatus = "✅ Successfully uploaded: $fileName (${fileSize}MB) - Loading model..."
+                    Log.d("ManualUpload", "File uploaded successfully: $fileName")
+                    
+                    // Update status after model loading completes
+                    kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
+                        kotlinx.coroutines.delay(3000) // Wait for model loading
+                        uploadStatus = "🎉 Model loaded and ready! Go to Chat tab to use $fileName"
+                    }
+                } else {
+                    uploadStatus = "❌ Upload failed: Could not copy file"
+                    Log.e("ManualUpload", "Failed to upload file: $fileName")
+                }
+            } catch (e: Exception) {
+                uploadStatus = "❌ Upload error: ${e.message}"
+                Log.e("ManualUpload", "Upload error", e)
+            }
+        }
+    }
+    
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "📥 Manual Model Download",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                
+                TextButton(
+                    onClick = { showPresets = !showPresets }
+                ) {
+                    Text("Official URLs")
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            Text(
+                text = "📱 Upload .bin (MediaPipe) or .tflite files from device storage, or 🌐 download from HuggingFace, Microsoft, Apple, and other sources. Supports Gemma, Phi, TinyLlama, and OpenELM models.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+            
+            if (showPresets) {
+                Spacer(modifier = Modifier.height(12.dp))
+                
+                Column {
+                    Text(
+                        text = "🎆 MediaPipe LLM Compatible Models:",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    // Gemma Models - MediaPipe Optimized
+                    Text(
+                        text = "🔥 Gemma Models (Google):",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    
+                    PresetModelOption(
+                        name = "Gemma 2B Instruct",
+                        source = "HuggingFace • MediaPipe Ready",
+                        url = "https://huggingface.co/google/gemma-2b-it/resolve/main/model.bin",
+                        sizeMB = 1200,
+                        onClick = { name, url, size ->
+                            modelName = name
+                            downloadUrl = url
+                            modelSize = size.toString()
+                            showDialog = true
+                        }
+                    )
+                    
+                    PresetModelOption(
+                        name = "Gemma 7B Instruct",
+                        source = "HuggingFace • High Performance",
+                        url = "https://huggingface.co/google/gemma-7b-it/resolve/main/model.bin",
+                        sizeMB = 3800,
+                        onClick = { name, url, size ->
+                            modelName = name
+                            downloadUrl = url
+                            modelSize = size.toString()
+                            showDialog = true
+                        }
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    // Microsoft Phi Models
+                    Text(
+                        text = "⚡ Phi Models (Microsoft):",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    
+                    PresetModelOption(
+                        name = "Phi-3 Mini 4K",
+                        source = "Microsoft • Efficient",
+                        url = "https://huggingface.co/microsoft/Phi-3-mini-4k-instruct/resolve/main/model.bin",
+                        sizeMB = 2700,
+                        onClick = { name, url, size ->
+                            modelName = name
+                            downloadUrl = url
+                            modelSize = size.toString()
+                            showDialog = true
+                        }
+                    )
+                    
+                    PresetModelOption(
+                        name = "Phi-2 Base",
+                        source = "Microsoft • Compact",
+                        url = "https://huggingface.co/microsoft/phi-2/resolve/main/model.bin",
+                        sizeMB = 2700,
+                        onClick = { name, url, size ->
+                            modelName = name
+                            downloadUrl = url
+                            modelSize = size.toString()
+                            showDialog = true
+                        }
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    // Alternative Sources
+                    Text(
+                        text = "🌐 Alternative Sources:",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    
+                    PresetModelOption(
+                        name = "TinyLlama 1.1B",
+                        source = "TinyLlama • Ultra-Lightweight",
+                        url = "https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0/resolve/main/model.bin",
+                        sizeMB = 600,
+                        onClick = { name, url, size ->
+                            modelName = name
+                            downloadUrl = url
+                            modelSize = size.toString()
+                            showDialog = true
+                        }
+                    )
+                    
+                    PresetModelOption(
+                        name = "OpenELM 270M",
+                        source = "Apple • On-Device Optimized",
+                        url = "https://huggingface.co/apple/OpenELM-270M/resolve/main/model.bin",
+                        sizeMB = 150,
+                        onClick = { name, url, size ->
+                            modelName = name
+                            downloadUrl = url
+                            modelSize = size.toString()
+                            showDialog = true
+                        }
+                    )
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            // Upload status display
+            if (uploadStatus.isNotEmpty()) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (uploadStatus.contains("✅")) 
+                            Color(0xFF4CAF50).copy(alpha = 0.1f) else 
+                            Color(0xFFF44336).copy(alpha = 0.1f)
+                    )
+                ) {
+                    Text(
+                        text = uploadStatus,
+                        modifier = Modifier.padding(12.dp),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            
+            // Action buttons
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(
+                    onClick = { 
+                        // Launch file picker with focus on model files
+                        filePickerLauncher.launch(arrayOf("*/*"))
+                        uploadStatus = "🖺️ Selecting model file (.bin or .tflite)..."
+                    },
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary
+                    )
+                ) {
+                    Icon(Icons.Filled.Upload, contentDescription = "Upload File")
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("📱 Upload Model")
+                }
+                
+                Button(
+                    onClick = { showDialog = true },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(Icons.Filled.Download, contentDescription = "Download URL")
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("🌐 Download URL")
+                }
+            }
+            
+            // Test button for loaded models
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            Button(
+                onClick = {
+                    scope.launch {
+                        val aiModelManager = AIModelManager.getInstance(context)
+                        val availableModels = aiModelManager.getAvailableModels()
+                        val loadedModels = availableModels.filter { it.isLoaded }
+                        
+                        if (loadedModels.isNotEmpty()) {
+                            uploadStatus = "✅ Test: Found ${loadedModels.size} loaded model(s): ${loadedModels.map { it.type.displayName }.joinToString(", ")}. Go to Chat to test!"
+                        } else {
+                            uploadStatus = "⚠️ Test: No models are loaded. Upload a model first!"
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiary
+                )
+            ) {
+                Icon(Icons.Filled.Star, contentDescription = "Test Models")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("🧪 Test Loaded Models")
+            }
+        }
+    }
+    
+    // Manual Download Dialog
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("📶 Download Model from URL") },
+            text = {
+                Column {
+                    Text(
+                        text = "Download MediaPipe-compatible models from any URL. Supports .bin and .tflite formats.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(bottom = 12.dp)
+                    )
+                    
+                    OutlinedTextField(
+                        value = modelName,
+                        onValueChange = { modelName = it },
+                        label = { Text("Model Name") },
+                        placeholder = { Text("e.g., Gemma 2B Instruct") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    OutlinedTextField(
+                        value = downloadUrl,
+                        onValueChange = { downloadUrl = it },
+                        label = { Text("Download URL") },
+                        placeholder = { Text("https://huggingface.co/.../model.bin") },
+                        modifier = Modifier.fillMaxWidth(),
+                        supportingText = {
+                            Text(
+                                text = "Tip: Use 'Official URLs' button for verified sources",
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    OutlinedTextField(
+                        value = modelSize,
+                        onValueChange = { modelSize = it },
+                        label = { Text("Estimated Size (MB)") },
+                        placeholder = { Text("1200") },
+                        modifier = Modifier.fillMaxWidth(),
+                        supportingText = {
+                            Text(
+                                text = "Used for progress tracking",
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        val sizeMB = modelSize.toIntOrNull() ?: 100
+                        if (modelName.isNotBlank() && downloadUrl.isNotBlank()) {
+                            onManualDownload(modelName, downloadUrl, sizeMB)
+                            showDialog = false
+                            modelName = ""
+                            downloadUrl = ""
+                            modelSize = ""
+                        }
+                    }
+                ) {
+                    Text("Download")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDialog = false }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+}
+
+@Composable
+fun PresetModelOption(
+    name: String,
+    source: String,
+    url: String,
+    sizeMB: Int,
+    onClick: (String, String, Int) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 2.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "$source • ${sizeMB}MB",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            
+            Button(
+                onClick = { onClick(name, url, sizeMB) },
+                modifier = Modifier.height(36.dp)
+            ) {
+                Text("Use")
+            }
+        }
+    }
+}
+
+/**
+ * Helper function to get file name from URI
+ */
+fun getFileName(context: Context, uri: Uri): String? {
+    var fileName: String? = null
+    
+    context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+        val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+        if (nameIndex >= 0 && cursor.moveToFirst()) {
+            fileName = cursor.getString(nameIndex)
+        }
+    }
+    
+    return fileName ?: uri.lastPathSegment
+}
+
+/**
+ * Helper function to get file size from URI
+ */
+fun getFileSize(context: Context, uri: Uri): Int {
+    var fileSize = 0
+    
+    try {
+        context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            val sizeIndex = cursor.getColumnIndex(android.provider.OpenableColumns.SIZE)
+            if (sizeIndex >= 0 && cursor.moveToFirst()) {
+                val sizeBytes = cursor.getLong(sizeIndex)
+                fileSize = (sizeBytes / (1024 * 1024)).toInt() // Convert to MB
+            }
+        }
+    } catch (e: Exception) {
+        Log.w("FileSize", "Could not determine file size", e)
+        fileSize = 100 // Default fallback size
+    }
+    
+    return if (fileSize > 0) fileSize else 100
+}
+
+/**
+ * Helper function to copy model file to internal storage and register it
+ */
+fun copyModelFile(context: Context, sourceUri: Uri, fileName: String): Boolean {
+    return try {
+        val modelsDir = File(context.filesDir, "ai_models")
+        if (!modelsDir.exists()) {
+            modelsDir.mkdirs()
+        }
+        
+        val destinationFile = File(modelsDir, fileName)
+        
+        context.contentResolver.openInputStream(sourceUri)?.use { inputStream ->
+            FileOutputStream(destinationFile).use { outputStream ->
+                inputStream.copyTo(outputStream)
+            }
+        }
+        
+        val success = destinationFile.exists() && destinationFile.length() > 0
+        Log.d("ModelUpload", "File copied successfully: ${destinationFile.path}, size: ${destinationFile.length()} bytes")
+        
+        if (success) {
+            // Register and load the uploaded model
+            val aiModelManager = AIModelManager.getInstance(context)
+            
+            // Determine model type based on filename with enhanced detection
+            val modelType = when {
+                fileName.contains("gemma", ignoreCase = true) && fileName.contains("2b", ignoreCase = true) -> AIModelManager.ModelType.GEMMA_2B
+                fileName.contains("gemma", ignoreCase = true) && fileName.contains("7b", ignoreCase = true) -> AIModelManager.ModelType.GEMMA_7B
+                fileName.contains("phi-2", ignoreCase = true) || fileName.contains("phi2", ignoreCase = true) -> AIModelManager.ModelType.PHI2_3B
+                fileName.contains("phi-3", ignoreCase = true) || fileName.contains("phi3", ignoreCase = true) -> AIModelManager.ModelType.PHI2_3B
+                fileName.contains("tinyllama", ignoreCase = true) || fileName.contains("tiny", ignoreCase = true) -> AIModelManager.ModelType.GEMMA_2B // Map to Gemma 2B for compatibility
+                fileName.contains("openelm", ignoreCase = true) || fileName.contains("270m", ignoreCase = true) -> AIModelManager.ModelType.GEMMA_2B // Map to Gemma 2B for compatibility
+                else -> AIModelManager.ModelType.GEMMA_2B // Default to Gemma 2B for unknown files
+            }
+            
+            Log.d("ModelUpload", "Detected model type: ${modelType.displayName} for file: $fileName")
+            
+            // Load the model immediately after upload
+            kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
+                try {
+                    Log.d("ModelUpload", "Loading uploaded model: ${modelType.displayName}")
+                    val loadResult = aiModelManager.loadModel(modelType)
+                    
+                    when (loadResult) {
+                        is AIModelManager.ModelLoadResult.Success -> {
+                            Log.i("ModelUpload", "✅ Successfully loaded uploaded model: ${modelType.displayName}")
+                            Log.i("ModelUpload", "🎉 Model is now ready for chat! Go to Chat tab to use it.")
+                        }
+                        is AIModelManager.ModelLoadResult.Error -> {
+                            Log.e("ModelUpload", "❌ Failed to load uploaded model: ${loadResult.message}")
+                        }
+                        else -> {
+                            Log.w("ModelUpload", "⚠️ Model uploaded but not loaded: $loadResult")
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.e("ModelUpload", "Exception loading uploaded model", e)
+                }
+            }
+        }
+        
+        success
+    } catch (e: Exception) {
+        Log.e("ModelUpload", "Failed to copy model file", e)
+        false
     }
 }
 
